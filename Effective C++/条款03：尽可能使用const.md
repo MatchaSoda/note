@@ -1,3 +1,4 @@
+# 条款03：尽可能使用const
 ### const和指针
 ```c++
 char test[] = "Hello";

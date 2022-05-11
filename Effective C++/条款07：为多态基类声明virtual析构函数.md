@@ -1,3 +1,4 @@
+# 条款07：为多态基类声明virtual析构函数
 ### 带有多态性质的base classes，或class带有任何virtual函数，它也应该拥有一个virtual析构函数。
 当derived class对象经由一个base class指针被删除，而该base class没有使用virtual析构函数，就会引发内存泄漏，因为对象的derived部分没有被销毁。如下：
 ```c++

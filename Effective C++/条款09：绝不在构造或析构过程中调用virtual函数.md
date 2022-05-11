@@ -1,3 +1,4 @@
+# 条款09：绝不在构造或析构过程中调用virtual函数
 ### 构造或析构过程中不要调用virtual函数，因为这类函数从不下降至deriverd class
 ```c++
 class Transaction {
