@@ -143,3 +143,27 @@ weak_ptr 用来表达**临时所有权**的概念：当某个对象只有存在�
 shared_ptr 被赋值给weak_ptr 时，shared_ptr的*引用计数*不变。因为在 shared_ptr 的实现中， shared_ptr 和 weak_ptr 是分别计数的，我们平常说的*引用计数*指的是 shared_ptr 的数量。
 
 在上边 son 和 father 的例子中将 shared_ptr 替换为 weak_ptr 即可解决循环引用问题。
+
+### 题目
+下面代码有什么问题吗？
+```cpp
+int main() {
+  std::unique_ptr<int> up(new int(1));
+  std::shared_ptr<int> sp1(up.release());
+  std::shared_ptr<int> sp2(up.get());
+  up.reset();
+  return 0;
+}
+```
+**没有问题。**  
+`up.release()`把管理对象交给了`sp1`，`up.get()`无管理对象时会返回一个`nullptr`，`sp2`以`nullptr`进行初始化。  
+`up.reset()`原型为
+```cpp
+void reset( pointer ptr = pointer() ) noexcept;
+```
+`reset()`主要干三件事：
+* 保存原指针的副本`old_ptr = current_ptr`
+* 替换当前指针为新指针`current_ptr = ptr`
+* 若旧指针非空则删除之前的管理对象`if(old_ptr != nullptr) get_deleter()(old_ptr)`
+
+所以这里reset使用也没有问题。
